@@ -1,13 +1,3 @@
-# app.py
-# ─────────────────────────────────────────────────────────────
-# Main Streamlit application — full UI with 3 modes.
-#
-# Structure:
-#   - Upload screen  (when no table is loaded)
-#   - Main interface (query / crud / learn)
-#   - Sidebar        (tables, stats, history, schema)
-# ─────────────────────────────────────────────────────────────
-
 import streamlit as st
 import plotly.express as px
 import pandas as pd
@@ -26,7 +16,7 @@ from utils.security import validate_file_upload
 from utils.db import get_connection
 
 
-# ── PAGE CONFIG ───────────────────────────────────────────────
+# PAGE CONFIG
 st.set_page_config(
     page_title  = "DataBridge AI",
     page_icon   = "🌿",
@@ -347,7 +337,7 @@ def auto_chart(df: pd.DataFrame):
     return None
 
 
-# ── SESSION STATE ─────────────────────────────────────────────
+# SESSION STATE
 # Why all these keys:
 # Streamlit reruns the whole script on every interaction.
 # Session state is the only way to persist data between reruns.
@@ -375,7 +365,7 @@ for key, val in defaults.items():
         st.session_state[key] = val
 
 
-# ── SUGGESTED QUESTIONS ───────────────────────────────────────
+# ── SUGGESTED QUESTIONS
 SUGGESTIONS = {
     "query": [
         "Show me the first 10 rows",
@@ -396,9 +386,7 @@ SUGGESTIONS = {
 }
 
 
-# ══════════════════════════════════════════════════════════════
 # SIDEBAR
-# ══════════════════════════════════════════════════════════════
 
 with st.sidebar:
 
@@ -419,7 +407,7 @@ with st.sidebar:
 
     st.divider()
 
-    # ── Upload new dataset ─────────────────────────────────────
+    # Upload new dataset
     st.markdown("""
     <div style="font-family:'DM Sans',sans-serif;font-size:0.75rem;
                 font-weight:600;color:var(--text-secondary);
@@ -495,7 +483,7 @@ with st.sidebar:
 
     st.divider()
 
-    # ── Previously uploaded tables ─────────────────────────────
+    # Previously uploaded tables 
     st.markdown("""
     <div style="font-family:'DM Sans',sans-serif;font-size:0.75rem;
                 font-weight:600;color:var(--text-secondary);
@@ -558,7 +546,7 @@ with st.sidebar:
 
     st.divider()
 
-    # ── Schema reference ───────────────────────────────────────
+    # Schema reference
     if st.session_state.active_schema:
         with st.expander("📐 Column Reference"):
             for col, dtype in st.session_state.active_schema.items():
@@ -618,11 +606,8 @@ with st.sidebar:
         """, unsafe_allow_html=True)
 
 
-# ══════════════════════════════════════════════════════════════
 # MAIN AREA
-# ══════════════════════════════════════════════════════════════
-
-# ── Header ────────────────────────────────────────────────────
+# ── Header
 if st.session_state.active_table:
     table_display = st.session_state.active_table.replace("_", " ").title()
     st.markdown(f"""
@@ -686,7 +671,7 @@ else:
     st.stop()  # Don't render the rest until a table is loaded
 
 
-# ── Suggestion chips ───────────────────────────────────────────
+# ── Suggestion chips 
 st.markdown("""
 <div style="font-family:'DM Sans',sans-serif;font-size:0.75rem;
             font-weight:600;color:var(--text-secondary);
@@ -706,7 +691,9 @@ chip_cols = st.columns(len(all_suggestions))
 for col, suggestion in zip(chip_cols, all_suggestions):
     with col:
         if st.button(suggestion, key=f"chip_{suggestion}"):
+            st.session_state.main_input  = suggestion
             st.session_state.input_value = suggestion
+            st.rerun()
 
 st.divider()
 
