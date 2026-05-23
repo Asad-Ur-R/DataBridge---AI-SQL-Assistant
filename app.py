@@ -357,6 +357,7 @@ defaults = {
     "crud_action":     None,   # Human-readable CRUD description
     "crud_operation":  None,   # DELETE / UPDATE / INSERT
     "input_value":     "",     # Current input box value
+    "main_input":         "", 
     "rows_affected":   None,   # After CRUD executes
     "last_uploaded_key":  None,
 }
@@ -708,8 +709,9 @@ st.markdown("""
 # Live intent preview
 # Why: Show the detected mode BEFORE the user submits so they
 # know the app understood their intent correctly. Builds trust.
-if st.session_state.input_value:
-    live_intent = detect_intent(st.session_state.input_value)
+current_input = st.session_state.get("main_input", "")
+if current_input:
+    live_intent = detect_intent(current_input)
     st.markdown(
         f'<div style="margin-bottom:0.5rem;">'
         f'{mode_badge(live_intent)}'
@@ -726,19 +728,14 @@ with input_col:
         "question",
         label_visibility = "collapsed",
         placeholder      = "e.g. Show me the top 10 rows by sales · Delete rows where profit is 0 · What does AVG do?",
-        value            = st.session_state.input_value,
         key              = "main_input"
-    )
+)
 
 with btn_col:
     ask_btn = st.button("Ask →", use_container_width=True)
 
-# Sync input to session state
-if question != st.session_state.input_value:
-    st.session_state.input_value = question
 
-
-# ── Pipeline ──────────────────────────────────────────────────
+# ── Pipeline 
 if ask_btn and question.strip():
 
     # Clear previous state
