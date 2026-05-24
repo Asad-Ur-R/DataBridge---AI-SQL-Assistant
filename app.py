@@ -201,7 +201,7 @@ def mode_badge(mode: str) -> str:
         "crud":  (  "MODIFY",  "#FDF0ED", "var(--coral)"),
         "learn": ( "LEARN",   "#FFF8ED", "var(--gold)"),
     }
-    icon, label, bg, color = configs.get(mode, ("💬", mode.upper(), "#F3F4F6", "#374151"))
+    label, bg, color = configs.get(mode, ( mode.upper(), "#F3F4F6", "#374151"))
     return f"""
     <span style="background:{bg};color:{color};border:1px solid {color};
                  border-radius:20px;padding:0.25rem 0.75rem;
