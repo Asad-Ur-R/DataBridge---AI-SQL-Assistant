@@ -197,9 +197,9 @@ def section_title(icon: str, title: str, subtitle: str = "") -> str:
 
 def mode_badge(mode: str) -> str:
     configs = {
-        "query": ("📊", "QUERY",   "#EDF7F1", "var(--green-deep)"),
-        "crud":  ("✏️",  "MODIFY",  "#FDF0ED", "var(--coral)"),
-        "learn": ("📖", "LEARN",   "#FFF8ED", "var(--gold)"),
+        "query": ( "QUERY",   "#EDF7F1", "var(--green-deep)"),
+        "crud":  (  "MODIFY",  "#FDF0ED", "var(--coral)"),
+        "learn": ( "LEARN",   "#FFF8ED", "var(--gold)"),
     }
     icon, label, bg, color = configs.get(mode, ("💬", mode.upper(), "#F3F4F6", "#374151"))
     return f"""
@@ -443,7 +443,7 @@ with st.sidebar:
                         border-radius:var(--radius-sm);padding:0.5rem 0.8rem;
                         font-family:'DM Sans',sans-serif;font-size:0.78rem;
                         color:var(--green-deep);">
-                ✅ {uploaded_file.name} loaded
+                 {uploaded_file.name} loaded
             </div>
             """, unsafe_allow_html=True)
 
@@ -650,9 +650,9 @@ else:
     # Feature cards
     cols = st.columns(3)
     features = [
-        ("📊", "Query",  "Ask questions about your data in plain English. Get instant results and beautiful charts."),
-        ("✏️",  "Modify", "Update, delete, or insert records just by describing what you want to change."),
-        ("📖", "Learn",  "Understand SQL through your own data. Ask what any query means and get clear explanations."),
+        ( "Query",  "Ask questions about your data in plain English. Get instant results and beautiful charts."),
+        (  "Modify", "Update, delete, or insert records just by describing what you want to change."),
+        ( "Learn",  "Understand SQL through your own data. Ask what any query means and get clear explanations."),
     ]
     for col, (icon, title, desc) in zip(cols, features):
         with col:
@@ -793,21 +793,19 @@ elif ask_btn and not question.strip():
     st.warning("Please type a question first.")
 
 
-# ══════════════════════════════════════════════════════════════
 # RESULTS DISPLAY
-# ══════════════════════════════════════════════════════════════
 
-# ── Error ─────────────────────────────────────────────────────
+# Error
 if st.session_state.error_msg:
     st.markdown(
         warning_box(f"⚠️ {st.session_state.error_msg}"),
         unsafe_allow_html=True
     )
 
-# ── QUERY results ─────────────────────────────────────────────
+# QUERY results 
 if st.session_state.last_sql and st.session_state.last_mode == "query":
     st.markdown(
-        section_title("🤖", "Generated SQL", "AI-translated your question to this query"),
+        section_title( "Generated SQL", "AI-translated your question to this query"),
         unsafe_allow_html=True
     )
     st.markdown(sql_block(st.session_state.last_sql), unsafe_allow_html=True)
@@ -827,7 +825,7 @@ if st.session_state.result_df is not None:
             f'<span style="background:var(--green-pale);color:var(--green-deep);'
             f'border-radius:20px;padding:0.2rem 0.8rem;'
             f'font-family:DM Sans,sans-serif;font-size:0.75rem;font-weight:600;">'
-            f'✅ {len(df):,} rows</span></div>',
+            f' {len(df):,} rows</span></div>',
             unsafe_allow_html=True
         )
 
@@ -878,13 +876,13 @@ if st.session_state.crud_pending:
             st.markdown(f"""
             <div style="font-family:'DM Sans',sans-serif;font-size:0.82rem;
                         color:var(--text-secondary);margin-bottom:0.4rem;">
-                👁️ Preview — {len(preview)} affected row(s) shown:
+                 Preview — {len(preview)} affected row(s) shown:
             </div>
             """, unsafe_allow_html=True)
             st.dataframe(preview, use_container_width=True, height=200)
         else:
             st.markdown(
-                success_box("ℹ️ No rows match this condition — operation would affect 0 rows."),
+                success_box(" No rows match this condition — operation would affect 0 rows."),
                 unsafe_allow_html=True
             )
 
@@ -893,7 +891,7 @@ if st.session_state.crud_pending:
     confirm_col, cancel_col, _ = st.columns([1, 1, 4])
 
     with confirm_col:
-        if st.button("✅ Confirm", key="confirm_crud"):
+        if st.button(" Confirm", key="confirm_crud"):
             with st.spinner("Executing..."):
                 rows_affected, err = execute_crud(sql)
 
@@ -912,7 +910,7 @@ if st.session_state.crud_pending:
             st.rerun()
 
     with cancel_col:
-        if st.button("❌ Cancel", key="cancel_crud"):
+        if st.button(" Cancel", key="cancel_crud"):
             st.session_state.crud_pending    = None
             st.session_state.crud_preview_df = None
             st.rerun()
@@ -921,7 +919,7 @@ if st.session_state.crud_pending:
 if st.session_state.rows_affected is not None:
     n = st.session_state.rows_affected
     st.markdown(
-        success_box(f"✅ Done — <strong>{n:,} row{'s' if n != 1 else ''}</strong> affected successfully."),
+        success_box(f"Done — <strong>{n:,} row{'s' if n != 1 else ''}</strong> affected successfully."),
         unsafe_allow_html=True
     )
 
@@ -939,5 +937,5 @@ if st.session_state.explanation:
 
     # Show the SQL it's explaining if relevant
     if st.session_state.last_sql and "last query" in (st.session_state.last_question or "").lower():
-        with st.expander("🔍 The SQL being explained"):
+        with st.expander(" The SQL being explained"):
             st.markdown(sql_block(st.session_state.last_sql), unsafe_allow_html=True)
