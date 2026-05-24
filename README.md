@@ -129,25 +129,6 @@ Environment Management	python-dotenv
 
 ---
 
-# System Workflow
-CSV Upload
-     ↓
-Automatic Data Cleaning
-     ↓
-PostgreSQL Table Creation
-     ↓
-Natural Language Prompt
-     ↓
-AI SQL Generation
-     ↓
-SQL Security Validation
-     ↓
-Safe Database Execution
-     ↓
-Results + Visualizations
-
----
-
 # Installation
 Clone Repository
 git clone https://github.com/your-username/databridge-ai.git
