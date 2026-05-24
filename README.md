@@ -1,5 +1,6 @@
 ## DataBridge AI
 **AI-Powered Natural Language Database Assistant**
+
 DataBridge AI is an intelligent SQL assistant that allows users to upload CSV files and interact with their database using plain English — no SQL knowledge required.
 Built using Python, Streamlit, PostgreSQL, and the Groq API powered by LLaMA 3.3 70B, the system transforms raw CSV files into fully queryable databases with AI-driven analytics, CRUD operations, and SQL learning support.
 
